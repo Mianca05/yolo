@@ -1,0 +1,59 @@
+-- Crear la función
+CREATE FUNCTION dbo.ValidateCedulaEc (@cedula VARCHAR(10))
+RETURNS BIT
+AS
+BEGIN
+    DECLARE @resultado BIT
+
+    IF LEN(@cedula) = 10
+    BEGIN
+        DECLARE @digito_region INT = CAST(SUBSTRING(@cedula, 1, 2) AS INT)
+
+        IF @digito_region >= 1 AND @digito_region <= 24
+        BEGIN
+            DECLARE @ultimo_digito INT = CAST(SUBSTRING(@cedula, 10, 1) AS INT)
+            DECLARE @pares INT = (CAST(SUBSTRING(@cedula, 2, 1) AS INT) + CAST(SUBSTRING(@cedula, 4, 1) AS INT) + CAST(SUBSTRING(@cedula, 6, 1) AS INT) + CAST(SUBSTRING(@cedula, 8, 1) AS INT))
+
+            -- Aquí debes completar la lógica adicional
+            -- ...
+
+            -- Establecer el resultado basado en la lógica de validación
+            -- Aquí deberías adaptar la lógica para establecer @resultado correctamente.
+
+            -- Ejemplo de lógica de resultado (ajusta según tus necesidades)
+            IF -- Condición de validación 
+            BEGIN
+                SET @resultado = 1 -- Válido
+            END
+            ELSE
+            BEGIN
+                SET @resultado = 0 -- Inválido
+            END
+
+            RETURN @resultado
+        END
+        ELSE
+        BEGIN
+            SET @resultado = 0 -- Establecer el resultado si el rango de la región no es válido
+        END
+    END
+    ELSE
+    BEGIN
+        SET @resultado = 0 -- Establecer el resultado si la longitud no es igual a 10
+    END
+
+    RETURN @resultado
+END;
+
+-- Ejemplo de uso de la función
+DECLARE @cedulaEjemplo VARCHAR(10) = '1234567890';
+DECLARE @resultadoValidacion BIT;
+
+-- Llamar a la función y obtener el resultado
+SET @resultadoValidacion = dbo.ValidateCedulaEc(@cedulaEjemplo);
+
+-- Imprimir el resultado (puedes adaptar esto según tus necesidades)
+IF @resultadoValidacion = 1
+    PRINT 'La cédula es válida'
+ELSE
+    PRINT 'La cédula es inválida';
